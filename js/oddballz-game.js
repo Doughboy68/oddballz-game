@@ -1290,7 +1290,11 @@
       this.lastTime = 0;
       this.accumulatedTime = 0;
 
-      this.highScores = JSON.parse(localStorage.getItem('oddballz_hiscores') || '[]');
+      try {
+        this.highScores = JSON.parse(localStorage.getItem('oddballz_hiscores') || '[]');
+      } catch (e) {
+        this.highScores = [];
+      }
 
       this.initAudioHooks();
       this.initEventListeners();
@@ -1782,12 +1786,16 @@
 
       this.highScores.sort((a, b) => b.score - a.score);
       this.highScores = this.highScores.slice(0, 10);
-      localStorage.setItem('oddballz_hiscores', JSON.stringify(this.highScores));
+      try {
+        localStorage.setItem('oddballz_hiscores', JSON.stringify(this.highScores));
+      } catch (e) {
+        console.warn("Could not write to localStorage:", e);
+      }
     }
 
     showHighScoresModal() {
       const modal = document.getElementById('modalHighScores');
-      if (modal && (modal.classList.contains('show') || modal.style.display === 'flex')) return;
+      if (modal && modal.classList.contains('show') && modal.style.display === 'flex') return;
 
       if (this.isPlaying && !this.isPaused) {
         this.wasPausedByModal = true;
@@ -1798,10 +1806,11 @@
       if (tbody) {
         tbody.innerHTML = '';
 
-        if (!this.highScores || this.highScores.length === 0) {
+        const scores = Array.isArray(this.highScores) ? this.highScores : [];
+        if (scores.length === 0) {
           tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; color:var(--text-muted); padding:1rem 0;">No high scores yet!</td></tr>';
         } else {
-          this.highScores.forEach((hs, idx) => {
+          scores.forEach((hs, idx) => {
             const tr = document.createElement('tr');
             tr.innerHTML = `
               <td class="hs-rank">#${idx + 1}</td>
@@ -1819,6 +1828,7 @@
         modal.style.display = 'flex';
         modal.style.opacity = '1';
         modal.style.visibility = 'visible';
+        modal.style.zIndex = '99999999';
       }
     }
 
