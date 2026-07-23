@@ -1291,7 +1291,7 @@
       this.accumulatedTime = 0;
 
       try {
-        this.highScores = JSON.parse(localStorage.getItem('oddballz_hiscores') || '[]');
+        this.highScores = JSON.parse(localStorage.getItem('oddballz_records_v1') || '[]');
       } catch (e) {
         this.highScores = [];
       }
@@ -1324,7 +1324,7 @@
 
     initEventListeners() {
       const closeModal = () => {
-        const modal = document.getElementById('modalHighScores');
+        const modal = document.getElementById('gameDialogView');
         if (modal) {
           modal.classList.remove('show');
           modal.style.display = 'none';
@@ -1366,7 +1366,7 @@
         const code = e.code;
 
         if (code === 'Escape') {
-          const modal = document.getElementById('modalHighScores');
+          const modal = document.getElementById('gameDialogView');
           if (modal && modal.classList.contains('show')) {
             closeModal();
             e.preventDefault();
@@ -1493,15 +1493,15 @@
       bindBtn('btnGameOverReturn', () => this.returnToTitle());
       bindBtn('btnPause', () => this.togglePause());
       bindBtn('btnPauseResume', () => this.togglePause());
-      bindBtn('btnHighScores', () => this.showHighScoresModal());
-      bindBtn('btnOverlayHighScores', () => this.showHighScoresModal());
-      bindBtn('btnGameOverHighScores', () => this.showHighScoresModal());
-      bindBtn('btnCloseModal', () => closeModal());
+      bindBtn('btnViewRecords', () => this.showHighScoresModal());
+      bindBtn('btnOverlayRecords', () => this.showHighScoresModal());
+      bindBtn('btnGameOverRecords', () => this.showHighScoresModal());
+      bindBtn('btnCloseRecords', () => closeModal());
 
-      const modalHighScores = document.getElementById('modalHighScores');
-      if (modalHighScores) {
-        modalHighScores.addEventListener('click', (e) => {
-          if (e.target === modalHighScores) closeModal();
+      const gameDialogView = document.getElementById('gameDialogView');
+      if (gameDialogView) {
+        gameDialogView.addEventListener('click', (e) => {
+          if (e.target === gameDialogView) closeModal();
         });
       }
 
@@ -1787,32 +1787,32 @@
       this.highScores.sort((a, b) => b.score - a.score);
       this.highScores = this.highScores.slice(0, 10);
       try {
-        localStorage.setItem('oddballz_hiscores', JSON.stringify(this.highScores));
+        localStorage.setItem('oddballz_records_v1', JSON.stringify(this.highScores));
       } catch (e) {
         console.warn("Could not write to localStorage:", e);
       }
     }
 
     showHighScoresModal() {
-      const modal = document.getElementById('modalHighScores');
+      const modal = document.getElementById('gameDialogView');
 
       if (this.isPlaying && !this.isPaused) {
         this.wasPausedByModal = true;
         this.togglePause();
       }
 
-      const tbody = document.getElementById('hsTableBody');
+      const tbody = document.getElementById('recordsTableBody');
       if (tbody) {
         tbody.innerHTML = '';
 
         const scores = Array.isArray(this.highScores) ? this.highScores : [];
         if (scores.length === 0) {
-          tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; color:var(--text-muted); padding:1rem 0;">No high scores yet!</td></tr>';
+          tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; color:var(--text-muted); padding:1rem 0;">No records saved yet!</td></tr>';
         } else {
           scores.forEach((hs, idx) => {
             const tr = document.createElement('tr');
             tr.innerHTML = `
-              <td class="hs-rank">#${idx + 1}</td>
+              <td class="rank-col">#${idx + 1}</td>
               <td style="font-weight:bold; color:var(--accent-cyan);">${hs.score}</td>
               <td>Lvl ${hs.level}</td>
               <td style="font-size:0.8rem; color:var(--text-muted);">${hs.mode}</td>

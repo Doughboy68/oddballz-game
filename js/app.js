@@ -21,7 +21,7 @@ class OddballzApp {
     this.accumulatedTime = 0;
 
     // High Scores array from localStorage
-    this.highScores = JSON.parse(localStorage.getItem('oddballz_hiscores') || '[]');
+    this.highScores = JSON.parse(localStorage.getItem('oddballz_records_v1') || '[]');
 
     this.initAudioHooks();
     this.initEventListeners();
@@ -348,21 +348,21 @@ class OddballzApp {
 
     this.highScores.sort((a, b) => b.score - a.score);
     this.highScores = this.highScores.slice(0, 10);
-    localStorage.setItem('oddballz_hiscores', JSON.stringify(this.highScores));
+    localStorage.setItem('oddballz_records_v1', JSON.stringify(this.highScores));
   }
 
   showHighScoresModal() {
-    const tbody = document.getElementById('hsTableBody');
+    const tbody = document.getElementById('recordsTableBody');
     if (tbody) {
       tbody.innerHTML = '';
 
       if (this.highScores.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; color:var(--text-muted); padding:1rem 0;">No high scores yet!</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; color:var(--text-muted); padding:1rem 0;">No records saved yet!</td></tr>';
       } else {
         this.highScores.forEach((hs, idx) => {
           const tr = document.createElement('tr');
           tr.innerHTML = `
-            <td class="hs-rank">#${idx + 1}</td>
+            <td class="rank-col">#${idx + 1}</td>
             <td style="font-weight:bold; color:var(--accent-cyan);">${hs.score}</td>
             <td>Lvl ${hs.level}</td>
             <td style="font-size:0.8rem; color:var(--text-muted);">${hs.mode}</td>
@@ -372,7 +372,7 @@ class OddballzApp {
       }
     }
 
-    const modal = document.getElementById('modalHighScores');
+    const modal = document.getElementById('gameDialogView');
     if (modal) {
       modal.classList.add('show');
       modal.style.display = 'flex';
@@ -380,7 +380,7 @@ class OddballzApp {
   }
 
   closeHighScoresModal() {
-    const modal = document.getElementById('modalHighScores');
+    const modal = document.getElementById('gameDialogView');
     if (modal) {
       modal.classList.remove('show');
       modal.style.display = 'none';

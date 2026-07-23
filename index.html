@@ -15,7 +15,7 @@
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
 
-  <link rel="stylesheet" href="css/main.css?v=1.0.1">
+  <link rel="stylesheet" href="css/main.css?v=1.0.2">
 </head>
 <body>
 
@@ -70,7 +70,7 @@
 
         <div class="action-buttons">
           <button id="btnPause" class="btn btn-secondary btn-sm" onclick="window.oddApp && window.oddApp.togglePause()" style="touch-action: manipulation;" disabled>⏸ Pause</button>
-          <button id="btnHighScores" class="btn btn-secondary btn-sm" onclick="window.oddApp && window.oddApp.showHighScoresModal()" style="touch-action: manipulation;">🏆 High Scores</button>
+          <button id="btnViewRecords" class="btn btn-secondary btn-sm" onclick="window.oddApp && window.oddApp.showHighScoresModal()" style="touch-action: manipulation;">🏆 Top Scores</button>
         </div>
       </aside>
 
@@ -106,7 +106,7 @@
             <p class="overlay-desc">Final Score: <span id="finalScore" style="color:var(--accent-cyan); font-weight:bold;">0</span></p>
             <div style="display:flex; gap:0.5rem; justify-content:center; align-items:center; flex-wrap:wrap; margin-top:0.5rem;">
               <button id="btnGameOverReturn" class="btn btn-accent" onclick="window.oddApp && window.oddApp.returnToTitle()" style="touch-action: manipulation;">Main Menu (Enter)</button>
-              <button id="btnGameOverHighScores" class="btn btn-secondary btn-sm" onclick="window.oddApp && window.oddApp.showHighScoresModal()" style="touch-action: manipulation;">🏆 High Scores</button>
+              <button id="btnGameOverRecords" class="btn btn-secondary btn-sm" onclick="window.oddApp && window.oddApp.showHighScoresModal()" style="touch-action: manipulation;">🏆 Top Scores</button>
             </div>
           </div>
         </div>
@@ -168,11 +168,11 @@
     </div>
   </div>
 
-  <!-- High Scores Modal -->
-  <div id="modalHighScores" class="modal-backdrop">
-    <div class="modal-card">
-      <h2 class="overlay-title" style="font-size:1.5rem; text-align:center;">🏆 Leaderboard</h2>
-      <table class="hs-table">
+  <!-- Records Dialog View -->
+  <div id="gameDialogView" class="dialog-container">
+    <div class="records-card">
+      <h2 class="overlay-title" style="font-size:1.5rem; text-align:center;">🏆 Top Scores</h2>
+      <table class="records-table">
         <thead>
           <tr>
             <th>Rank</th>
@@ -181,16 +181,16 @@
             <th>Mode</th>
           </tr>
         </thead>
-        <tbody id="hsTableBody">
+        <tbody id="recordsTableBody">
           <!-- Populated dynamically -->
         </tbody>
       </table>
-      <button id="btnCloseModal" class="btn btn-secondary btn-sm" onclick="window.oddApp && window.oddApp.closeHighScoresModal()" style="margin-top:1rem; align-self:center; touch-action: manipulation;">Close</button>
+      <button id="btnCloseRecords" class="btn btn-secondary btn-sm" onclick="window.oddApp && window.oddApp.closeHighScoresModal()" style="margin-top:1rem; align-self:center; touch-action: manipulation;">Close</button>
     </div>
   </div>
 
   <!-- Standalone Game Script (Runs natively on file:// and http://) -->
-  <script src="js/oddballz-game.js?v=1.0.1"></script>
+  <script src="js/oddballz-game.js?v=1.0.2"></script>
 
 </body>
 </html>
