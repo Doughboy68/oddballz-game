@@ -331,6 +331,8 @@ body {
 }
 
 .touch-btn {
+  -webkit-appearance: none;
+  appearance: none;
   background: rgba(255, 255, 255, 0.08);
   border: 1px solid rgba(255, 255, 255, 0.15);
   color: white;
@@ -340,6 +342,7 @@ body {
   font-size: 1rem;
   cursor: pointer;
   touch-action: manipulation;
+  box-sizing: border-box;
 }
 
 .touch-btn:active {
@@ -348,26 +351,29 @@ body {
 }
 
 .touch-btn.btn-flip {
-  grid-column: span 1;
-  background: rgba(56, 189, 248, 0.2);
-  border-color: var(--accent-cyan);
-  color: var(--accent-cyan);
-  font-size: 0.85rem;
+  grid-column: span 1 !important;
+  background: rgba(56, 189, 248, 0.25) !important;
+  border: 1px solid var(--accent-cyan) !important;
+  color: var(--accent-cyan) !important;
+  font-size: 0.85rem !important;
+  -webkit-appearance: none !important;
 }
 
 .touch-btn.btn-f {
-  grid-column: span 1;
-  background: rgba(244, 114, 182, 0.2);
-  border-color: var(--accent-pink);
-  color: var(--accent-pink);
-  font-size: 0.85rem;
+  grid-column: span 1 !important;
+  background: rgba(244, 114, 182, 0.25) !important;
+  border: 1px solid var(--accent-pink) !important;
+  color: var(--accent-pink) !important;
+  font-size: 0.85rem !important;
+  -webkit-appearance: none !important;
 }
 
 .touch-btn.btn-space {
-  grid-column: span 2;
-  background: rgba(192, 132, 252, 0.2);
-  border-color: var(--accent-purple);
-  color: var(--accent-purple);
+  grid-column: span 2 !important;
+  background: rgba(192, 132, 252, 0.25) !important;
+  border: 1px solid var(--accent-purple) !important;
+  color: var(--accent-purple) !important;
+  -webkit-appearance: none !important;
 }
 
 /* Mode Switch Tabs */
@@ -418,7 +424,9 @@ body {
   background: rgba(10, 12, 20, 0.98);
   align-items: center;
   justify-content: center;
-  z-index: 9999999 !important;
+  z-index: 2147483647 !important;
+  -webkit-transform: translateZ(999999px);
+  transform: translateZ(999999px);
   padding: 1rem;
   box-sizing: border-box;
 }

@@ -220,26 +220,37 @@ class OddballzApp {
     const bindTouch = (id, action) => {
       const btn = document.getElementById(id);
       if (!btn) return;
-      btn.addEventListener('touchstart', (e) => {
-        e.preventDefault();
+      let lastTouch = 0;
+      const trigger = (e) => {
+        if (e.type === 'touchstart' || e.type === 'pointerdown') {
+          lastTouch = Date.now();
+        } else if (e.type === 'click') {
+          if (Date.now() - lastTouch < 400) {
+            if (e.cancelable) e.preventDefault();
+            return;
+          }
+        }
+        if (e.cancelable) e.preventDefault();
         if (this.isPlaying && !this.isPaused) {
           action();
           this.renderer.drawEngineState(this.engine);
         }
-      });
-      btn.addEventListener('click', () => {
-        if (this.isPlaying && !this.isPaused) {
-          action();
-          this.renderer.drawEngineState(this.engine);
-        }
-      });
+      };
+
+      btn.addEventListener('pointerdown', trigger, { passive: false });
+      btn.addEventListener('touchstart', trigger, { passive: false });
+      btn.addEventListener('click', trigger);
     };
 
     bindTouch('btnTouchLeft', () => this.engine.moveOBall(1));
     bindTouch('btnTouchRight', () => this.engine.moveOBall(4));
     bindTouch('btnTouchRotCW', () => this.engine.transform(this.engine.rotCW));
     bindTouch('btnTouchRotCCW', () => this.engine.transform(this.engine.rotCCW));
-    bindTouch('btnTouchFlip', () => this.engine.transform(this.engine.flipX));
+    bindTouch('btnTouchFlip', () => {
+      if (!this.engine.transform(this.engine.flipX)) {
+        this.engine.transform(this.engine.flipY);
+      }
+    });
     bindTouch('btnTouchF', () => this.engine.rotColors());
     bindTouch('btnTouchSpace', () => this.engine.zip());
   }
