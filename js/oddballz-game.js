@@ -1655,6 +1655,7 @@
         if (tabColor) tabColor.classList.remove('active');
       }
       this.engine.initGame();
+      this.updateUI();
     }
 
     initTouchControls() {

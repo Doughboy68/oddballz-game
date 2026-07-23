@@ -379,6 +379,18 @@ body {
   -webkit-appearance: none !important;
 }
 
+.touch-btn.disabled,
+.touch-btn:disabled,
+.touch-btn.btn-f.disabled,
+.touch-btn.btn-f:disabled {
+  opacity: 0.35 !important;
+  cursor: not-allowed !important;
+  pointer-events: none !important;
+  filter: grayscale(0.8) !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+  box-shadow: none !important;
+}
+
 /* Mode Switch Tabs */
 .mode-tabs {
   display: flex;
