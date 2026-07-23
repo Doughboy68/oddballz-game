@@ -53,15 +53,17 @@ export class SoundEngine {
     const { isPlaying, track } = this.audioStateBeforeFocusLoss;
     this.audioStateBeforeFocusLoss = null;
 
-    if (isPlaying && track && this.bgAudio && !this.bgAudio._disposed) {
-      try {
+    if (isPlaying && track) {
+      if (this.bgAudio && !this.bgAudio._disposed) {
         const playPromise = this.bgAudio.play();
         if (playPromise !== undefined) {
           playPromise.catch(() => {
-            if (typeof this.playMidiTrack === 'function') this.playMidiTrack(track);
+            if (typeof this.stopMidi === 'function') this.stopMidi();
+            this.currentTrack = null;
           });
         }
-      } catch (e) {
+      } else {
+        this.currentTrack = null;
         if (typeof this.playMidiTrack === 'function') this.playMidiTrack(track);
       }
     }

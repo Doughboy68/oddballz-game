@@ -1094,15 +1094,17 @@
       const { isPlaying, track } = this.audioStateBeforeFocusLoss;
       this.audioStateBeforeFocusLoss = null;
 
-      if (isPlaying && track && this.bgAudio && !this.bgAudio._disposed) {
-        try {
+      if (isPlaying && track) {
+        if (this.bgAudio && !this.bgAudio._disposed) {
           const playPromise = this.bgAudio.play();
           if (playPromise !== undefined) {
             playPromise.catch(() => {
-              this.playMidiTrack(track);
+              this.stopMidi();
+              this.currentTrack = null;
             });
           }
-        } catch (e) {
+        } else {
+          this.currentTrack = null;
           this.playMidiTrack(track);
         }
       }
@@ -1145,8 +1147,17 @@
         return;
       }
 
-      // If the requested track is ALREADY active, do not restart it!
+      // If the requested track is ALREADY active, check if paused and attempt resume!
       if (this.currentTrack === trackName && this.bgAudio && !this.bgAudio._disposed) {
+        if (this.bgAudio.paused) {
+          const playPromise = this.bgAudio.play();
+          if (playPromise !== undefined) {
+            playPromise.catch(() => {
+              this.stopMidi();
+              this.currentTrack = null;
+            });
+          }
+        }
         return;
       }
 
@@ -1616,18 +1627,29 @@
         });
       }
 
-      // Interaction listener: starts intro music as soon as user clicks or presses any key
+      // Interaction listener: starts/resumes intro or end music on user gesture if browser paused audio
       const tryStartIntro = () => {
         this.audio.init();
-        if (!this.isPlaying && this.audio.enabled && this.isStartScreen) {
-          if (this.audio.currentTrack !== 'intro') {
-            this.audio.playMidiTrack('intro');
+        if (this.audio.enabled) {
+          if (!this.isPlaying && this.isStartScreen) {
+            if (this.audio.currentTrack !== 'intro' || !this.audio.bgAudio || this.audio.bgAudio.paused) {
+              this.audio.playMidiTrack('intro');
+            }
+          } else {
+            const overlayGameOver = document.getElementById('overlayGameOver');
+            const isGameOver = overlayGameOver && !overlayGameOver.classList.contains('hidden');
+            if (isGameOver) {
+              if (this.audio.currentTrack !== 'end' || !this.audio.bgAudio || this.audio.bgAudio.paused) {
+                this.audio.playMidiTrack('end');
+              }
+            }
           }
         }
       };
 
       window.addEventListener('pointerdown', tryStartIntro);
       window.addEventListener('keydown', tryStartIntro);
+      window.addEventListener('click', tryStartIntro);
 
       const tabColor = document.getElementById('tabColorMatch');
       const tabRow = document.getElementById('tabRowBuild');
