@@ -1291,7 +1291,7 @@
       this.accumulatedTime = 0;
 
       try {
-        this.highScores = JSON.parse(localStorage.getItem('oddballz_records_v1') || '[]');
+        this.highScores = JSON.parse(localStorage.getItem('oddballz_hiscores') || '[]');
       } catch (e) {
         this.highScores = [];
       }
@@ -1787,7 +1787,7 @@
       this.highScores.sort((a, b) => b.score - a.score);
       this.highScores = this.highScores.slice(0, 10);
       try {
-        localStorage.setItem('oddballz_records_v1', JSON.stringify(this.highScores));
+        localStorage.setItem('oddballz_hiscores', JSON.stringify(this.highScores));
       } catch (e) {
         console.warn("Could not write to localStorage:", e);
       }
