@@ -1630,7 +1630,7 @@
     togglePause() {
       if (!this.isPlaying) return;
       const now = Date.now();
-      if (this.lastPauseToggle && now - this.lastPauseToggle < 250) return;
+      if (this.lastPauseToggle && now - this.lastPauseToggle < 150) return;
       this.lastPauseToggle = now;
 
       this.isPaused = !this.isPaused;
@@ -1643,12 +1643,18 @@
           this.animFrameId = null;
         }
         this.audio.stopMidi();
-        if (overlayPause) overlayPause.classList.remove('hidden');
+        if (overlayPause) {
+          overlayPause.classList.remove('hidden');
+          overlayPause.style.display = 'flex';
+        }
       } else {
         if (this.audio.enabled) {
           this.audio.playMidiTrack('play');
         }
-        if (overlayPause) overlayPause.classList.add('hidden');
+        if (overlayPause) {
+          overlayPause.classList.add('hidden');
+          overlayPause.style.display = 'none';
+        }
         this.lastTime = performance.now();
         this.animFrameId = requestAnimationFrame((t) => this.gameLoop(t));
       }
@@ -1696,10 +1702,6 @@
     }
 
     handleGameOver() {
-      if (this.animFrameId) {
-        cancelAnimationFrame(this.animFrameId);
-        this.animFrameId = null;
-      }
       this.isPlaying = false;
       if (this.audio.enabled) {
         this.audio.playMidiTrack('end');
@@ -1731,7 +1733,10 @@
       if (overlayGameOver) overlayGameOver.classList.add('hidden');
 
       const overlayPause = document.getElementById('overlayPause');
-      if (overlayPause) overlayPause.classList.add('hidden');
+      if (overlayPause) {
+        overlayPause.classList.add('hidden');
+        overlayPause.style.display = 'none';
+      }
 
       const overlayStart = document.getElementById('overlayStart');
       if (overlayStart) overlayStart.classList.remove('hidden');
@@ -1790,7 +1795,6 @@
 
     showHighScoresModal() {
       const modal = document.getElementById('modalHighScores');
-      if (modal && modal.classList.contains('show') && modal.style.display === 'flex') return;
 
       if (this.isPlaying && !this.isPaused) {
         this.wasPausedByModal = true;

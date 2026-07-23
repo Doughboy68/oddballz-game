@@ -145,8 +145,7 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(10, 11, 16, 0.92);
-  backdrop-filter: blur(8px);
+  background: rgba(10, 11, 16, 0.95);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -164,26 +163,26 @@ body {
 }
 
 #overlayGameOver {
-  background: rgba(7, 9, 15, 0.72);
-  backdrop-filter: blur(2px);
+  background: rgba(7, 9, 15, 0.92);
 }
 
 .intro-logo-banner {
   width: 100%;
   display: flex;
   justify-content: center;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.25rem;
 }
 
 .intro-logo-img {
-  width: 100%;
-  max-width: 320px;
+  width: 95%;
+  max-width: 460px;
+  max-height: 180px;
   height: auto;
   object-fit: contain;
-  border-radius: 8px;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.7);
-  border: 1px solid rgba(56, 189, 248, 0.25);
-  background: rgba(0, 0, 0, 0.5);
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.8), 0 0 15px rgba(56, 189, 248, 0.25);
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  background: rgba(0, 0, 0, 0.6);
 }
 
 .overlay-title {
@@ -578,8 +577,9 @@ input:checked + .slider:before {
   }
 
   #overlayStart .intro-logo-img {
-    max-width: 230px;
-    max-height: 75px;
+    width: 96%;
+    max-width: 320px;
+    max-height: 110px;
   }
 
   #overlayStart .overlay-desc {
