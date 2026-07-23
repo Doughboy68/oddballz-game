@@ -174,9 +174,9 @@ body {
 }
 
 .intro-logo-img {
-  width: 95%;
-  max-width: 460px;
-  max-height: 180px;
+  width: 98%;
+  max-width: 480px;
+  max-height: 220px;
   height: auto;
   object-fit: contain;
   border-radius: 10px;
@@ -577,9 +577,9 @@ input:checked + .slider:before {
   }
 
   #overlayStart .intro-logo-img {
-    width: 96%;
-    max-width: 320px;
-    max-height: 110px;
+    width: 98%;
+    max-width: 100%;
+    max-height: 160px;
   }
 
   #overlayStart .overlay-desc {
