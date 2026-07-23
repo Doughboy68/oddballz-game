@@ -1324,6 +1324,8 @@
         if (modal) {
           modal.classList.remove('show');
           modal.style.display = 'none';
+          modal.style.opacity = '0';
+          modal.style.visibility = 'hidden';
         }
         if (this.wasPausedByModal) {
           this.wasPausedByModal = false;
@@ -1482,20 +1484,24 @@
       const btnGameOverReturn = document.getElementById('btnGameOverReturn');
       if (btnGameOverReturn) btnGameOverReturn.addEventListener('click', () => this.returnToTitle());
 
-      const btnPause = document.getElementById('btnPause');
-      if (btnPause) btnPause.addEventListener('click', () => this.togglePause());
+      const bindBtn = (id, handler) => {
+        const btn = document.getElementById(id);
+        if (!btn) return;
+        btn.addEventListener('click', (e) => {
+          if (e) e.preventDefault();
+          handler();
+        });
+        btn.addEventListener('touchend', (e) => {
+          if (e) e.preventDefault();
+          handler();
+        });
+      };
 
-      const btnHighScores = document.getElementById('btnHighScores');
-      if (btnHighScores) btnHighScores.addEventListener('click', (e) => { e.preventDefault(); this.showHighScoresModal(); });
-
-      const btnOverlayHighScores = document.getElementById('btnOverlayHighScores');
-      if (btnOverlayHighScores) btnOverlayHighScores.addEventListener('click', (e) => { e.preventDefault(); this.showHighScoresModal(); });
-
-      const btnGameOverHighScores = document.getElementById('btnGameOverHighScores');
-      if (btnGameOverHighScores) btnGameOverHighScores.addEventListener('click', (e) => { e.preventDefault(); this.showHighScoresModal(); });
-
-      const btnCloseModal = document.getElementById('btnCloseModal');
-      if (btnCloseModal) btnCloseModal.addEventListener('click', (e) => { e.preventDefault(); closeModal(); });
+      bindBtn('btnPause', () => this.togglePause());
+      bindBtn('btnHighScores', () => this.showHighScoresModal());
+      bindBtn('btnOverlayHighScores', () => this.showHighScoresModal());
+      bindBtn('btnGameOverHighScores', () => this.showHighScoresModal());
+      bindBtn('btnCloseModal', () => closeModal());
 
       const modalHighScores = document.getElementById('modalHighScores');
       if (modalHighScores) {
@@ -1781,7 +1787,7 @@
 
     showHighScoresModal() {
       const modal = document.getElementById('modalHighScores');
-      if (modal && modal.classList.contains('show')) return;
+      if (modal && (modal.classList.contains('show') || modal.style.display === 'flex')) return;
 
       if (this.isPlaying && !this.isPaused) {
         this.wasPausedByModal = true;
@@ -1811,6 +1817,8 @@
       if (modal) {
         modal.classList.add('show');
         modal.style.display = 'flex';
+        modal.style.opacity = '1';
+        modal.style.visibility = 'visible';
       }
     }
 

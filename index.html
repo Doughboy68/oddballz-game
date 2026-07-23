@@ -63,7 +63,10 @@
           </label>
         </div>
 
-        <button id="btnHighScores" class="btn btn-secondary btn-sm" style="touch-action: manipulation;">🏆 High Scores</button>
+        <div class="action-buttons">
+          <button id="btnPause" class="btn btn-secondary btn-sm" onclick="window.oddApp && window.oddApp.togglePause()" style="touch-action: manipulation;" disabled>⏸ Pause</button>
+          <button id="btnHighScores" class="btn btn-secondary btn-sm" onclick="window.oddApp && window.oddApp.showHighScoresModal()" style="touch-action: manipulation;">🏆 High Scores</button>
+        </div>
       </aside>
 
       <!-- Center Panel: Game Canvas & Overlays -->
@@ -98,7 +101,7 @@
             <p class="overlay-desc">Final Score: <span id="finalScore" style="color:var(--accent-cyan); font-weight:bold;">0</span></p>
             <div style="display:flex; gap:0.5rem; justify-content:center; align-items:center; flex-wrap:wrap; margin-top:0.5rem;">
               <button id="btnGameOverReturn" class="btn btn-accent" onclick="window.oddApp && window.oddApp.returnToTitle()">Main Menu (Enter)</button>
-              <button id="btnGameOverHighScores" class="btn btn-secondary btn-sm" style="touch-action: manipulation;">🏆 High Scores</button>
+              <button id="btnGameOverHighScores" class="btn btn-secondary btn-sm" onclick="window.oddApp && window.oddApp.showHighScoresModal()" style="touch-action: manipulation;">🏆 High Scores</button>
             </div>
           </div>
         </div>

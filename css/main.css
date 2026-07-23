@@ -417,6 +417,8 @@ body {
 
 .modal-backdrop.show {
   display: flex !important;
+  opacity: 1 !important;
+  visibility: visible !important;
 }
 
 .modal-card {
@@ -621,4 +623,18 @@ input:checked + .slider:before {
     max-height: 88dvh;
     padding: 1rem;
   }
+}
+
+.action-buttons {
+  display: flex;
+  gap: 0.5rem;
+  width: 100%;
+  justify-content: space-between;
+  margin-top: 0.5rem;
+}
+
+.action-buttons .btn {
+  flex: 1;
+  justify-content: center;
+  touch-action: manipulation;
 }
