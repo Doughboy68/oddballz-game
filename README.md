@@ -16,6 +16,8 @@ A complete web recreation of **Oddballz**, the original 1992 Tetris-inspired hex
 - **Dual Game Modes**:
   - **Color Matching Mode** (`Matcher = true`, Default)
   - **Row Building Mode** (`Matcher = false`)
+- **Level & Shape Progression**:
+  - 7 distinct shape types unlock progressively from Level 1 (2 shapes) to Level 10+ (all 7 shapes unlocked).
 
 ---
 

@@ -1,12 +1,10 @@
 ========================================================================
                       ODDBALLZ (1992 / Web Port v1.0)
-          Created by Fred Kohler & Ported to Windows by Brian Semotiuk
+          Created by Fred Kohler & Ported to Web by Brian Semotiuk
 ========================================================================
 
-Hi Fred!
-
-Here is Version 1.0 of Oddballz fully ported to run natively in any modern
-web browser (Chrome, Edge, Firefox, Safari)!
+Oddballz is a classic 1992 hexagonal gravity puzzle game, fully ported to
+run natively in any modern web browser (Chrome, Edge, Firefox, Safari)!
 
 ------------------------------------------------------------------------
 HOW TO RUN:
@@ -32,6 +30,17 @@ GAME CONTROLS:
 • 'M'                : Toggle Audio / Music
 
 ------------------------------------------------------------------------
+LEVEL & SHAPE PROGRESSION:
+------------------------------------------------------------------------
+Oddballz features 7 distinct shape types that unlock progressively as you level up:
+• Level 1 - 2  : 2 Shape Types (3-4 Colors)
+• Level 3 - 4  : 3 Shape Types (4-5 Colors)
+• Level 5 - 6  : 4 Shape Types (5-6 Colors)
+• Level 7 - 8  : 5 Shape Types (6 Colors)
+• Level 9      : 6 Shape Types (6 Colors)
+• Level 10 - 50: All 7 Shape Types Unlocked (6 Colors)
+
+------------------------------------------------------------------------
 FEATURES & HIGHLIGHTS:
 ------------------------------------------------------------------------
 - Authentic 1992 320x240 VGA graphics with pixel-perfect ball masking
@@ -41,6 +50,4 @@ FEATURES & HIGHLIGHTS:
 - High score leaderboard saved locally
 - Touch controls for mobile & tablet support
 
-Enjoy!
-- Brian Semotiuk
 ========================================================================
