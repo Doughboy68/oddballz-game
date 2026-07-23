@@ -1482,19 +1482,10 @@
       const bindBtn = (id, handler) => {
         const btn = document.getElementById(id);
         if (!btn) return;
-        let lastTriggerTime = 0;
-        const safeHandler = (e) => {
-          if (e) {
-            e.preventDefault();
-            e.stopPropagation();
-          }
-          const now = Date.now();
-          if (now - lastTriggerTime < 300) return;
-          lastTriggerTime = now;
+        btn.addEventListener('click', (e) => {
+          if (e) e.stopPropagation();
           handler();
-        };
-        btn.addEventListener('click', safeHandler);
-        btn.addEventListener('touchend', safeHandler);
+        });
       };
 
       bindBtn('btnStart', () => this.startGame());
@@ -1638,6 +1629,10 @@
 
     togglePause() {
       if (!this.isPlaying) return;
+      const now = Date.now();
+      if (this.lastPauseToggle && now - this.lastPauseToggle < 250) return;
+      this.lastPauseToggle = now;
+
       this.isPaused = !this.isPaused;
       this.engine.pauseFlag = this.isPaused;
 

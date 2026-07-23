@@ -64,8 +64,8 @@
         </div>
 
         <div class="action-buttons">
-          <button id="btnPause" class="btn btn-secondary btn-sm" style="touch-action: manipulation;" disabled>⏸ Pause</button>
-          <button id="btnHighScores" class="btn btn-secondary btn-sm" style="touch-action: manipulation;">🏆 High Scores</button>
+          <button id="btnPause" class="btn btn-secondary btn-sm" onclick="window.oddApp && window.oddApp.togglePause()" style="touch-action: manipulation;" disabled>⏸ Pause</button>
+          <button id="btnHighScores" class="btn btn-secondary btn-sm" onclick="window.oddApp && window.oddApp.showHighScoresModal()" style="touch-action: manipulation;">🏆 High Scores</button>
         </div>
       </aside>
 
@@ -84,7 +84,7 @@
               <strong>Rows Game</strong>: Build full hex rows across edges. Balls only drop if unsupported from both sides underneath!
             </p>
             <div style="display:flex; gap:0.5rem; justify-content:center; align-items:center; flex-wrap:wrap; margin-top:0.25rem;">
-              <button id="btnOverlayStart" class="btn" style="touch-action: manipulation;">Start Game (Enter)</button>
+              <button id="btnOverlayStart" class="btn" onclick="window.oddApp && window.oddApp.startGame()" style="touch-action: manipulation;">Start Game (Enter)</button>
             </div>
           </div>
 
@@ -92,7 +92,7 @@
           <div id="overlayPause" class="canvas-overlay hidden">
             <h2 class="overlay-title">PAUSED</h2>
             <p class="overlay-desc">Game is currently paused.</p>
-            <button id="btnPauseResume" class="btn" style="touch-action: manipulation;">Resume (P)</button>
+            <button id="btnPauseResume" class="btn" onclick="window.oddApp && window.oddApp.togglePause()" style="touch-action: manipulation;">Resume (P)</button>
           </div>
 
           <!-- Game Over Overlay -->
@@ -100,8 +100,8 @@
             <h2 class="overlay-title" style="color:var(--accent-pink);">GAME OVER</h2>
             <p class="overlay-desc">Final Score: <span id="finalScore" style="color:var(--accent-cyan); font-weight:bold;">0</span></p>
             <div style="display:flex; gap:0.5rem; justify-content:center; align-items:center; flex-wrap:wrap; margin-top:0.5rem;">
-              <button id="btnGameOverReturn" class="btn btn-accent" style="touch-action: manipulation;">Main Menu (Enter)</button>
-              <button id="btnGameOverHighScores" class="btn btn-secondary btn-sm" style="touch-action: manipulation;">🏆 High Scores</button>
+              <button id="btnGameOverReturn" class="btn btn-accent" onclick="window.oddApp && window.oddApp.returnToTitle()" style="touch-action: manipulation;">Main Menu (Enter)</button>
+              <button id="btnGameOverHighScores" class="btn btn-secondary btn-sm" onclick="window.oddApp && window.oddApp.showHighScoresModal()" style="touch-action: manipulation;">🏆 High Scores</button>
             </div>
           </div>
         </div>
@@ -180,7 +180,7 @@
           <!-- Populated dynamically -->
         </tbody>
       </table>
-      <button id="btnCloseModal" class="btn btn-secondary btn-sm" style="margin-top:1rem; align-self:center;">Close</button>
+      <button id="btnCloseModal" class="btn btn-secondary btn-sm" onclick="window.oddApp && window.oddApp.closeHighScoresModal()" style="margin-top:1rem; align-self:center; touch-action: manipulation;">Close</button>
     </div>
   </div>
 
