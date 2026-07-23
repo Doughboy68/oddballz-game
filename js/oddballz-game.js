@@ -977,7 +977,7 @@
       if (!engine.endGame && !engine.pauseFlag) {
         for (let i = 0; i <= 3; i++) {
           const mapPt = engine.oddballz.map[i];
-          if (engine.checkInMap(mapPt) && mapPt.y >= 3) {
+          if (engine.checkInMap(mapPt) && mapPt.y >= 0) {
             const px = this.getPixelX(mapPt.x, mapPt.y);
             const py = (mapPt.y - 3) * 13;
             const color = engine.oddballz.image[i];
@@ -1698,6 +1698,9 @@
         this.animFrameId = null;
       }
       this.isStartScreen = false;
+      this.wasPausedByModal = false;
+      this.wasPausedByFocusLoss = false;
+
       try {
         this.audio.init();
         if (this.audio.enabled) {
@@ -1707,6 +1710,8 @@
         console.warn("MIDI audio error:", e);
       }
       this.engine.initGame();
+      this.engine.endGame = false;
+      this.engine.pauseFlag = false;
       this.engine.build();
 
       this.isPlaying = true;
@@ -1720,6 +1725,12 @@
 
       const overlayGameOver = document.getElementById('overlayGameOver');
       if (overlayGameOver) overlayGameOver.classList.add('hidden');
+
+      const overlayPause = document.getElementById('overlayPause');
+      if (overlayPause) {
+        overlayPause.classList.add('hidden');
+        overlayPause.style.display = 'none';
+      }
 
       const btnPause = document.getElementById('btnPause');
       if (btnPause) btnPause.disabled = false;
@@ -1809,6 +1820,7 @@
 
     handleGameOver() {
       this.isPlaying = false;
+      this.engine.endGame = true;
       if (this.audio.enabled) {
         this.audio.playMidiTrack('end');
       }
@@ -1837,6 +1849,11 @@
       this.isPlaying = false;
       this.isPaused = false;
       this.isStartScreen = true;
+      this.wasPausedByModal = false;
+      this.wasPausedByFocusLoss = false;
+
+      this.engine.endGame = true;
+      this.engine.pauseFlag = false;
 
       const overlayGameOver = document.getElementById('overlayGameOver');
       if (overlayGameOver) overlayGameOver.classList.add('hidden');

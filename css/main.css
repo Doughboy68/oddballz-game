@@ -336,13 +336,16 @@ body {
   background: rgba(255, 255, 255, 0.08);
   border: 1px solid rgba(255, 255, 255, 0.15);
   color: white;
-  padding: 0.8rem 0;
+  padding: 0.8rem 0.2rem;
   border-radius: 10px;
   font-weight: bold;
-  font-size: 1rem;
+  font-size: 0.9rem;
   cursor: pointer;
   touch-action: manipulation;
   box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .touch-btn:active {
@@ -352,7 +355,7 @@ body {
 
 .touch-btn.btn-flip {
   grid-column: span 1 !important;
-  background: rgba(56, 189, 248, 0.25) !important;
+  background: rgba(56, 189, 248, 0.2) !important;
   border: 1px solid var(--accent-cyan) !important;
   color: var(--accent-cyan) !important;
   font-size: 0.85rem !important;
@@ -361,7 +364,7 @@ body {
 
 .touch-btn.btn-f {
   grid-column: span 1 !important;
-  background: rgba(244, 114, 182, 0.25) !important;
+  background: rgba(244, 114, 182, 0.2) !important;
   border: 1px solid var(--accent-pink) !important;
   color: var(--accent-pink) !important;
   font-size: 0.85rem !important;
@@ -370,7 +373,7 @@ body {
 
 .touch-btn.btn-space {
   grid-column: span 2 !important;
-  background: rgba(192, 132, 252, 0.25) !important;
+  background: rgba(192, 132, 252, 0.2) !important;
   border: 1px solid var(--accent-purple) !important;
   color: var(--accent-purple) !important;
   -webkit-appearance: none !important;
