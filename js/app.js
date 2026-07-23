@@ -239,6 +239,7 @@ class OddballzApp {
     bindTouch('btnTouchRight', () => this.engine.moveOBall(4));
     bindTouch('btnTouchRotCW', () => this.engine.transform(this.engine.rotCW));
     bindTouch('btnTouchRotCCW', () => this.engine.transform(this.engine.rotCCW));
+    bindTouch('btnTouchFlip', () => this.engine.transform(this.engine.flipX));
     bindTouch('btnTouchF', () => this.engine.rotColors());
     bindTouch('btnTouchSpace', () => this.engine.zip());
   }

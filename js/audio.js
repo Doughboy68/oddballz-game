@@ -9,6 +9,7 @@ export class SoundEngine {
     this.enabled = true;
     this.musicEnabled = false;
     this.freq = [25, 27, 28, 30, 32, 33, 35, 37, 39, 40, 42, 44, 45, 47, 49, 51, 52, 54, 56];
+    this.audioStateBeforeFocusLoss = null;
   }
 
   init() {
@@ -16,8 +17,53 @@ export class SoundEngine {
       const AudioCtx = window.AudioContext || window.webkitAudioContext;
       this.ctx = new AudioCtx();
     }
-    if (this.ctx.state === 'suspended') {
+    if (this.ctx && this.ctx.state === 'suspended') {
       this.ctx.resume();
+    }
+  }
+
+  pauseForFocusLoss() {
+    this.audioStateBeforeFocusLoss = {
+      enabled: this.enabled,
+      track: this.currentTrack,
+      isPlaying: !!(this.bgAudio && !this.bgAudio.paused && !this.bgAudio._disposed)
+    };
+
+    if (this.bgAudio && !this.bgAudio._disposed) {
+      try {
+        this.bgAudio.pause();
+      } catch (e) {}
+    }
+    if (this.ctx && this.ctx.state === 'running') {
+      try {
+        this.ctx.suspend();
+      } catch (e) {}
+    }
+  }
+
+  resumeFromFocusGain() {
+    if (this.ctx && this.ctx.state === 'suspended') {
+      try {
+        this.ctx.resume();
+      } catch (e) {}
+    }
+
+    if (!this.enabled || !this.audioStateBeforeFocusLoss) return;
+
+    const { isPlaying, track } = this.audioStateBeforeFocusLoss;
+    this.audioStateBeforeFocusLoss = null;
+
+    if (isPlaying && track && this.bgAudio && !this.bgAudio._disposed) {
+      try {
+        const playPromise = this.bgAudio.play();
+        if (playPromise !== undefined) {
+          playPromise.catch(() => {
+            if (typeof this.playMidiTrack === 'function') this.playMidiTrack(track);
+          });
+        }
+      } catch (e) {
+        if (typeof this.playMidiTrack === 'function') this.playMidiTrack(track);
+      }
     }
   }
 

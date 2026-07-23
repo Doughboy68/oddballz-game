@@ -1048,6 +1048,7 @@
       this.currentTrack = null;
       this.bgAudio = null;
       this.activeAudios = [];
+      this.audioStateBeforeFocusLoss = null;
     }
 
     init() {
@@ -1059,6 +1060,51 @@
       }
       if (this.ctx && this.ctx.state === 'suspended') {
         this.ctx.resume();
+      }
+    }
+
+    pauseForFocusLoss() {
+      this.audioStateBeforeFocusLoss = {
+        enabled: this.enabled,
+        track: this.currentTrack,
+        isPlaying: !!(this.bgAudio && !this.bgAudio.paused && !this.bgAudio._disposed)
+      };
+
+      if (this.bgAudio && !this.bgAudio._disposed) {
+        try {
+          this.bgAudio.pause();
+        } catch (e) {}
+      }
+      if (this.ctx && this.ctx.state === 'running') {
+        try {
+          this.ctx.suspend();
+        } catch (e) {}
+      }
+    }
+
+    resumeFromFocusGain() {
+      if (this.ctx && this.ctx.state === 'suspended') {
+        try {
+          this.ctx.resume();
+        } catch (e) {}
+      }
+
+      if (!this.enabled || !this.audioStateBeforeFocusLoss) return;
+
+      const { isPlaying, track } = this.audioStateBeforeFocusLoss;
+      this.audioStateBeforeFocusLoss = null;
+
+      if (isPlaying && track && this.bgAudio && !this.bgAudio._disposed) {
+        try {
+          const playPromise = this.bgAudio.play();
+          if (playPromise !== undefined) {
+            playPromise.catch(() => {
+              this.playMidiTrack(track);
+            });
+          }
+        } catch (e) {
+          this.playMidiTrack(track);
+        }
       }
     }
 
@@ -1372,6 +1418,12 @@
             e.preventDefault();
             return;
           }
+          const modalEnd = document.getElementById('dialogConfirmEnd');
+          if (modalEnd && modalEnd.classList.contains('show')) {
+            this.closeEndGameModal();
+            e.preventDefault();
+            return;
+          }
         }
 
         const overlayGameOver = document.getElementById('overlayGameOver');
@@ -1493,6 +1545,10 @@
       bindBtn('btnGameOverReturn', () => this.returnToTitle());
       bindBtn('btnPause', () => this.togglePause());
       bindBtn('btnPauseResume', () => this.togglePause());
+      bindBtn('btnEndGame', () => this.promptEndGame());
+      bindBtn('btnPauseEnd', () => this.promptEndGame());
+      bindBtn('btnConfirmEndYes', () => this.confirmEndGame());
+      bindBtn('btnConfirmEndNo', () => this.closeEndGameModal());
       bindBtn('btnViewRecords', () => this.showHighScoresModal());
       bindBtn('btnOverlayRecords', () => this.showHighScoresModal());
       bindBtn('btnGameOverRecords', () => this.showHighScoresModal());
@@ -1505,18 +1561,34 @@
         });
       }
 
-      // Auto-pause when window or browser tab loses focus
+      const dialogConfirmEnd = document.getElementById('dialogConfirmEnd');
+      if (dialogConfirmEnd) {
+        dialogConfirmEnd.addEventListener('click', (e) => {
+          if (e.target === dialogConfirmEnd) this.closeEndGameModal();
+        });
+      }
+
+      // Auto-pause and mute sound when window or browser tab loses focus
       const handleFocusLoss = () => {
+        this.audio.pauseForFocusLoss();
         if (this.isPlaying && !this.isPaused) {
           this.wasPausedByFocusLoss = true;
           this.togglePause();
         }
       };
 
+      const handleFocusGain = () => {
+        this.audio.resumeFromFocusGain();
+      };
+
       window.addEventListener('blur', handleFocusLoss);
+      window.addEventListener('focus', handleFocusGain);
+
       document.addEventListener('visibilitychange', () => {
         if (document.hidden) {
           handleFocusLoss();
+        } else {
+          handleFocusGain();
         }
       });
 
@@ -1585,6 +1657,7 @@
       bindTouch('btnTouchRight', () => this.engine.moveOBall(4));
       bindTouch('btnTouchRotCW', () => this.engine.transform(this.engine.rotCW));
       bindTouch('btnTouchRotCCW', () => this.engine.transform(this.engine.rotCCW));
+      bindTouch('btnTouchFlip', () => this.engine.transform(this.engine.flipX));
       bindTouch('btnTouchF', () => this.engine.rotColors());
       bindTouch('btnTouchSpace', () => this.engine.zip());
     }
@@ -1620,6 +1693,9 @@
 
       const btnPause = document.getElementById('btnPause');
       if (btnPause) btnPause.disabled = false;
+
+      const btnEndGame = document.getElementById('btnEndGame');
+      if (btnEndGame) btnEndGame.disabled = false;
 
       this.renderer.drawEngineState(this.engine);
       this.updateUI();
@@ -1716,6 +1792,9 @@
       const btnPause = document.getElementById('btnPause');
       if (btnPause) btnPause.disabled = true;
 
+      const btnEndGame = document.getElementById('btnEndGame');
+      if (btnEndGame) btnEndGame.disabled = true;
+
       this.renderer.drawEngineState(this.engine);
       this.updateUI();
     }
@@ -1744,12 +1823,59 @@
       const btnPause = document.getElementById('btnPause');
       if (btnPause) btnPause.disabled = true;
 
+      const btnEndGame = document.getElementById('btnEndGame');
+      if (btnEndGame) btnEndGame.disabled = true;
+
       if (this.audio.enabled) {
         this.audio.playMidiTrack('intro');
       }
 
       this.renderer.drawEngineState(this.engine);
       this.updateUI();
+    }
+
+    promptEndGame() {
+      if (!this.isPlaying) return;
+      const modal = document.getElementById('dialogConfirmEnd');
+      if (!this.isPaused) {
+        this.wasPausedByModal = true;
+        this.togglePause();
+      }
+      if (modal) {
+        modal.classList.add('show');
+        modal.style.display = 'flex';
+        modal.style.opacity = '1';
+        modal.style.visibility = 'visible';
+        modal.style.zIndex = '99999999';
+      }
+    }
+
+    closeEndGameModal() {
+      const modal = document.getElementById('dialogConfirmEnd');
+      if (modal) {
+        modal.classList.remove('show');
+        modal.style.display = 'none';
+        modal.style.opacity = '0';
+        modal.style.visibility = 'hidden';
+      }
+      if (this.wasPausedByModal) {
+        this.wasPausedByModal = false;
+        if (this.isPlaying && this.isPaused) {
+          this.togglePause();
+        }
+      }
+    }
+
+    confirmEndGame() {
+      this.wasPausedByModal = false;
+      const modal = document.getElementById('dialogConfirmEnd');
+      if (modal) {
+        modal.classList.remove('show');
+        modal.style.display = 'none';
+        modal.style.opacity = '0';
+        modal.style.visibility = 'hidden';
+      }
+      this.returnToTitle();
     }
 
     updateUI() {

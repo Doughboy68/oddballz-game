@@ -70,6 +70,7 @@
 
         <div class="action-buttons">
           <button id="btnPause" class="btn btn-secondary btn-sm" onclick="window.oddApp && window.oddApp.togglePause()" style="touch-action: manipulation;" disabled>⏸ Pause</button>
+          <button id="btnEndGame" class="btn btn-secondary btn-sm" onclick="window.oddApp && window.oddApp.promptEndGame()" style="touch-action: manipulation;" disabled>🛑 End Game</button>
           <button id="btnViewRecords" class="btn btn-secondary btn-sm" onclick="window.oddApp && window.oddApp.showHighScoresModal()" style="touch-action: manipulation;">🏆 Top Scores</button>
         </div>
       </aside>
@@ -97,7 +98,10 @@
           <div id="overlayPause" class="canvas-overlay hidden">
             <h2 class="overlay-title">PAUSED</h2>
             <p class="overlay-desc">Game is currently paused.</p>
-            <button id="btnPauseResume" class="btn" onclick="window.oddApp && window.oddApp.togglePause()" style="touch-action: manipulation;">Resume (P)</button>
+            <div style="display:flex; gap:0.5rem; justify-content:center; align-items:center; flex-wrap:wrap; margin-top:0.5rem;">
+              <button id="btnPauseResume" class="btn" onclick="window.oddApp && window.oddApp.togglePause()" style="touch-action: manipulation;">Resume (P)</button>
+              <button id="btnPauseEnd" class="btn btn-secondary" onclick="window.oddApp && window.oddApp.promptEndGame()" style="touch-action: manipulation;">End Game</button>
+            </div>
           </div>
 
           <!-- Game Over Overlay -->
@@ -117,7 +121,8 @@
           <button id="btnTouchRight" class="touch-btn">Right ▶</button>
           <button id="btnTouchRotCCW" class="touch-btn">↺ Rot CCW</button>
           <button id="btnTouchRotCW" class="touch-btn">↻ Rot CW</button>
-          <button id="btnTouchF" class="touch-btn btn-f">⚡ 'F' / Ins Cycle Colors</button>
+          <button id="btnTouchFlip" class="touch-btn btn-flip">↔ Flip</button>
+          <button id="btnTouchF" class="touch-btn btn-f">⚡ Cycle Colors</button>
           <button id="btnTouchSpace" class="touch-btn btn-space">⬇ Zip Drop (+1 Pt)</button>
         </div>
       </main>
@@ -186,6 +191,18 @@
         </tbody>
       </table>
       <button id="btnCloseRecords" class="btn btn-secondary btn-sm" onclick="window.oddApp && window.oddApp.closeHighScoresModal()" style="margin-top:1rem; align-self:center; touch-action: manipulation;">Close</button>
+    </div>
+  </div>
+
+  <!-- End Game Confirmation Modal -->
+  <div id="dialogConfirmEnd" class="dialog-container">
+    <div class="records-card confirm-card" style="align-items: center; text-align: center;">
+      <h2 class="overlay-title" style="font-size:1.5rem; text-align:center; color: var(--accent-pink);">End Game?</h2>
+      <p class="overlay-desc" style="text-align:center; margin: 1rem 0; color: var(--text-main);">Are you sure you want to end the current game and return to the title screen?</p>
+      <div style="display:flex; gap:0.75rem; justify-content:center; width:100%; margin-top: 0.5rem;">
+        <button id="btnConfirmEndYes" class="btn btn-accent btn-sm" onclick="window.oddApp && window.oddApp.confirmEndGame()" style="flex:1; touch-action: manipulation;">End Game</button>
+        <button id="btnConfirmEndNo" class="btn btn-secondary btn-sm" onclick="window.oddApp && window.oddApp.closeEndGameModal()" style="flex:1; touch-action: manipulation;">Cancel</button>
+      </div>
     </div>
   </div>
 
