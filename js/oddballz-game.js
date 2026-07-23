@@ -128,7 +128,7 @@
       ];
 
       this.startPos = [
-        { x: 6, y: 2 }, { x: 7, y: 2 }, { x: 8, y: 2 }, { x: 9, y: 2 }
+        { x: 6, y: 3 }, { x: 7, y: 3 }, { x: 8, y: 3 }, { x: 9, y: 3 }
       ];
 
       this.matcher = true;
@@ -1483,7 +1483,9 @@
           case 'KeyF':
           case 'Insert':
           case 'Numpad0':
-            this.engine.rotColors();
+            if (this.engine.matcher) {
+              this.engine.rotColors();
+            }
             e.preventDefault();
             break;
 
@@ -1512,13 +1514,17 @@
 
           case 'KeyX':
           case 'Home':
-            this.engine.transform(this.engine.flipX);
+            if (this.engine.transform(this.engine.flipX)) {
+              if (this.engine.onPlaySound) this.engine.onPlaySound('click');
+            }
             e.preventDefault();
             break;
 
           case 'KeyY':
           case 'End':
-            this.engine.transform(this.engine.flipY);
+            if (this.engine.transform(this.engine.flipY)) {
+              if (this.engine.onPlaySound) this.engine.onPlaySound('click');
+            }
             e.preventDefault();
             break;
 
@@ -1680,11 +1686,15 @@
       bindTouch('btnTouchRotCW', () => this.engine.transform(this.engine.rotCW));
       bindTouch('btnTouchRotCCW', () => this.engine.transform(this.engine.rotCCW));
       bindTouch('btnTouchFlip', () => {
-        if (!this.engine.transform(this.engine.flipX)) {
-          this.engine.transform(this.engine.flipY);
+        if (this.engine.transform(this.engine.flipX) || this.engine.transform(this.engine.flipY)) {
+          if (this.audio && this.audio.enabled) this.audio.playSound('click');
         }
       });
-      bindTouch('btnTouchF', () => this.engine.rotColors());
+      bindTouch('btnTouchF', () => {
+        if (this.engine.matcher) {
+          this.engine.rotColors();
+        }
+      });
       bindTouch('btnTouchSpace', () => this.engine.zip());
     }
 
@@ -1941,6 +1951,13 @@
       const tabRow = document.getElementById('tabRowBuild');
       if (tabColor) tabColor.classList.toggle('disabled', this.isPlaying);
       if (tabRow) tabRow.classList.toggle('disabled', this.isPlaying);
+
+      const btnTouchF = document.getElementById('btnTouchF');
+      if (btnTouchF) {
+        const isColorMatch = this.engine.matcher;
+        btnTouchF.disabled = !isColorMatch;
+        btnTouchF.classList.toggle('disabled', !isColorMatch);
+      }
     }
 
     updateHighScores(score, level, skill) {

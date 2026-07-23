@@ -128,7 +128,7 @@ export class OddUnitEngine {
     ];
 
     this.startPos = [
-      { x: 6, y: 2 }, { x: 7, y: 2 }, { x: 8, y: 2 }, { x: 9, y: 2 }
+      { x: 6, y: 3 }, { x: 7, y: 3 }, { x: 8, y: 3 }, { x: 9, y: 3 }
     ];
 
     // State Variables
