@@ -1475,29 +1475,29 @@
         this.renderer.drawEngineState(this.engine);
       });
 
-      const btnStart = document.getElementById('btnStart');
-      if (btnStart) btnStart.addEventListener('click', () => this.startGame());
-
-      const btnOverlayStart = document.getElementById('btnOverlayStart');
-      if (btnOverlayStart) btnOverlayStart.addEventListener('click', () => this.startGame());
-
-      const btnGameOverReturn = document.getElementById('btnGameOverReturn');
-      if (btnGameOverReturn) btnGameOverReturn.addEventListener('click', () => this.returnToTitle());
-
       const bindBtn = (id, handler) => {
         const btn = document.getElementById(id);
         if (!btn) return;
-        btn.addEventListener('click', (e) => {
-          if (e) e.preventDefault();
+        let lastTriggerTime = 0;
+        const safeHandler = (e) => {
+          if (e) {
+            e.preventDefault();
+            e.stopPropagation();
+          }
+          const now = Date.now();
+          if (now - lastTriggerTime < 300) return;
+          lastTriggerTime = now;
           handler();
-        });
-        btn.addEventListener('touchend', (e) => {
-          if (e) e.preventDefault();
-          handler();
-        });
+        };
+        btn.addEventListener('click', safeHandler);
+        btn.addEventListener('touchend', safeHandler);
       };
 
+      bindBtn('btnStart', () => this.startGame());
+      bindBtn('btnOverlayStart', () => this.startGame());
+      bindBtn('btnGameOverReturn', () => this.returnToTitle());
       bindBtn('btnPause', () => this.togglePause());
+      bindBtn('btnPauseResume', () => this.togglePause());
       bindBtn('btnHighScores', () => this.showHighScoresModal());
       bindBtn('btnOverlayHighScores', () => this.showHighScoresModal());
       bindBtn('btnGameOverHighScores', () => this.showHighScoresModal());
