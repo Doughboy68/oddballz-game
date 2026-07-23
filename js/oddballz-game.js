@@ -977,7 +977,7 @@
       if (!engine.endGame && !engine.pauseFlag) {
         for (let i = 0; i <= 3; i++) {
           const mapPt = engine.oddballz.map[i];
-          if (engine.checkInMap(mapPt) && mapPt.y >= 0) {
+          if (mapPt.x >= 0 && mapPt.x <= 24 && mapPt.y >= 0 && mapPt.y <= 23) {
             const px = this.getPixelX(mapPt.x, mapPt.y);
             const py = (mapPt.y - 3) * 13;
             const color = engine.oddballz.image[i];
@@ -1534,16 +1534,14 @@
       const bindBtn = (id, handler) => {
         const btn = document.getElementById(id);
         if (!btn) return;
-        let lastTouch = 0;
+        let lastTriggerTime = 0;
         const trigger = (e) => {
-          if (e.type === 'touchstart' || e.type === 'pointerdown') {
-            lastTouch = Date.now();
-          } else if (e.type === 'click') {
-            if (Date.now() - lastTouch < 400) {
-              if (e.cancelable) e.preventDefault();
-              return;
-            }
+          const now = Date.now();
+          if (now - lastTriggerTime < 250) {
+            if (e.cancelable) e.preventDefault();
+            return;
           }
+          lastTriggerTime = now;
           if (e.cancelable) e.preventDefault();
           handler();
         };
@@ -1657,16 +1655,14 @@
       const bindTouch = (id, action) => {
         const btn = document.getElementById(id);
         if (!btn) return;
-        let lastTouch = 0;
+        let lastTriggerTime = 0;
         const trigger = (e) => {
-          if (e.type === 'touchstart' || e.type === 'pointerdown') {
-            lastTouch = Date.now();
-          } else if (e.type === 'click') {
-            if (Date.now() - lastTouch < 400) {
-              if (e.cancelable) e.preventDefault();
-              return;
-            }
+          const now = Date.now();
+          if (now - lastTriggerTime < 200) {
+            if (e.cancelable) e.preventDefault();
+            return;
           }
+          lastTriggerTime = now;
           if (e.cancelable) e.preventDefault();
           if (this.isPlaying && !this.isPaused) {
             action();

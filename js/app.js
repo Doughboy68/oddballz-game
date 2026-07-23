@@ -220,16 +220,14 @@ class OddballzApp {
     const bindTouch = (id, action) => {
       const btn = document.getElementById(id);
       if (!btn) return;
-      let lastTouch = 0;
+      let lastTriggerTime = 0;
       const trigger = (e) => {
-        if (e.type === 'touchstart' || e.type === 'pointerdown') {
-          lastTouch = Date.now();
-        } else if (e.type === 'click') {
-          if (Date.now() - lastTouch < 400) {
-            if (e.cancelable) e.preventDefault();
-            return;
-          }
+        const now = Date.now();
+        if (now - lastTriggerTime < 200) {
+          if (e.cancelable) e.preventDefault();
+          return;
         }
+        lastTriggerTime = now;
         if (e.cancelable) e.preventDefault();
         if (this.isPlaying && !this.isPaused) {
           action();
