@@ -1,5 +1,5 @@
 {
-  "name": "oddballz-1992",
+  "name": "oddballz-hd",
   "private": true,
   "version": "1.0.0",
   "type": "module",
@@ -8,7 +8,11 @@
     "build": "vite build",
     "preview": "vite preview"
   },
+  "dependencies": {
+    "three": "^0.160.0",
+    "canvas-confetti": "^1.9.2"
+  },
   "devDependencies": {
-    "vite": "^5.0.0"
+    "vite": "^5.0.10"
   }
 }

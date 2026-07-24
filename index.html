@@ -1,214 +1,232 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Oddballz (1992) - Hexagonal Gravity Arcade Game</title>
-
-  <!-- Google Fonts -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <!-- Cache Control Meta Tags to force fresh asset fetching on new releases -->
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+  <title>Oddballz HD - Hex Puzzle Game Engine</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@600;700&family=Outfit:wght@400;600;700;900&display=swap" rel="stylesheet">
-
-  <!-- Meta Cache Control for Safari -->
-  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-  <meta http-equiv="Pragma" content="no-cache">
-  <meta http-equiv="Expires" content="0">
-
-  <link rel="stylesheet" href="css/main.css?v=1.1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./src/style.css?v=1.0.4">
+  
+  <!-- Standalone Global Libraries (Compatible with file:// local opening & http://) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
 </head>
 <body>
+  <!-- App Layout Grid: Canvas Viewport Top, Dedicated Controls Bar Bottom -->
+  <div id="appLayout">
+    <!-- 3D Three.js Canvas Container -->
+    <main id="canvasContainer"></main>
 
-  <div class="game-container">
-    
-    <!-- Header -->
-    <header class="header">
-      <div class="title-container">
-        <h1 class="title-logo">ODDBALLZ</h1>
-        <span class="badge">1992 EDITION</span>
+    <!-- Dedicated Controls Panel Physically Below 3D Playfield -->
+    <footer id="bottomControlsBar" class="glass-card">
+      <div class="touch-cluster">
+        <button id="btnTouchLeft" class="touch-btn"><span class="btn-icon">◀</span><span class="btn-label">Left</span></button>
+        <button id="btnTouchRight" class="touch-btn"><span class="btn-icon">▶</span><span class="btn-label">Right</span></button>
+        <button id="btnTouchRotCCW" class="touch-btn"><span class="btn-icon">↺</span><span class="btn-label">Rot CCW</span></button>
+        <button id="btnTouchRotCW" class="touch-btn"><span class="btn-icon">↻</span><span class="btn-label">Rot CW</span></button>
+        <button id="btnTouchFlip" class="touch-btn"><span class="btn-icon">⇄</span><span class="btn-label">Flip X</span></button>
+        <button id="btnTouchFlipY" class="touch-btn"><span class="btn-icon">⇅</span><span class="btn-label">Flip Y</span></button>
+        <button id="btnTouchF" class="touch-btn btn-f"><span class="btn-icon">🎨</span><span class="btn-label">Color (F)</span></button>
+        <button id="btnTouchSpace" class="touch-btn btn-zip"><span class="btn-icon">⚡</span><span class="btn-label">HARD DROP</span></button>
       </div>
-      <p class="subtitle">Hexagonal Gravity Puzzle by Fred Kohler & Brian Semotiuk</p>
+    </footer>
+  </div>
+
+  <!-- HUD Glassmorphic Overlay (Header, Stats, Modals) -->
+  <div id="uiOverlay">
+    <!-- Header Bar -->
+    <header class="game-header glass-card">
+      <div class="brand">
+        <h1 class="logo-text">ODDBALLZ <span class="badge-hd">HD</span></h1>
+      </div>
+
+      <!-- Mode Selector Tabs -->
+      <div class="mode-tabs">
+        <button id="tabColorMatch" class="mode-tab active">
+          <span class="tab-icon">💎</span> Color Match (5+)
+        </button>
+        <button id="tabRowBuild" class="mode-tab">
+          <span class="tab-icon">⚡</span> Row Build
+        </button>
+      </div>
+
+      <!-- Quick Action Toggles -->
+      <div class="header-actions">
+        <label class="toggle-switch">
+          <input type="checkbox" id="toggleSound" checked>
+          <span class="slider"></span>
+          <span class="toggle-label">🔊 Audio</span>
+        </label>
+        <button id="btnPause" class="btn btn-secondary btn-sm" disabled>Pause (P)</button>
+        <button id="btnHighScores" class="btn btn-secondary btn-sm">🏆 High Scores</button>
+        <button id="btnAbout" class="btn btn-secondary btn-sm">ℹ️ About & Credits</button>
+      </div>
     </header>
 
-    <!-- Main Layout -->
-    <div class="main-layout">
-      
-      <!-- Left Panel: Stats & Game Modes (Corner Windows) -->
-      <aside class="panel side-panel">
-        <div class="mode-tabs">
-          <div id="tabColorMatch" class="mode-tab active">Color Match</div>
-          <div id="tabRowBuild" class="mode-tab">Rows Game</div>
-        </div>
+    <!-- Stats Bar -->
+    <aside class="stats-panel glass-card">
+      <div class="stat-card">
+        <span class="stat-label">SCORE</span>
+        <span id="statScore" class="stat-value text-gold">0</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">LEVEL</span>
+        <span id="statLevel" class="stat-value text-cyan">1</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">SKILL RATING</span>
+        <span id="statSkill" class="stat-value text-emerald">1</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">BALLS</span>
+        <span id="statBalls" class="stat-value">0</span>
+      </div>
+    </aside>
 
-        <div class="stat-card">
-          <span class="stat-label">Level</span>
-          <span id="statLevel" class="stat-value gold">1</span>
-        </div>
-
-        <div class="stat-card">
-          <span class="stat-label">Skill</span>
-          <span id="statSkill" class="stat-value">1</span>
-        </div>
-
-        <div class="stat-card">
-          <span class="stat-label">Oddballz</span>
-          <span id="statBalls" class="stat-value">0</span>
-        </div>
-
-        <div class="stat-card">
-          <span class="stat-label">Score</span>
-          <span id="statScore" class="stat-value highlight">0</span>
-        </div>
-
-        <div class="toggle-group">
-          <span class="stat-label">Sound / MIDI</span>
-          <label class="switch">
-            <input type="checkbox" id="toggleSound" checked>
-            <span class="slider"></span>
-          </label>
-        </div>
-
-        <div class="action-buttons">
-          <button id="btnPause" class="btn btn-secondary btn-sm" onclick="window.oddApp && window.oddApp.togglePause()" style="touch-action: manipulation;" disabled>⏸ Pause</button>
-          <button id="btnEndGame" class="btn btn-secondary btn-sm" onclick="window.oddApp && window.oddApp.promptEndGame()" style="touch-action: manipulation;" disabled>🛑 End Game</button>
-          <button id="btnViewRecords" class="btn btn-secondary btn-sm" onclick="window.oddApp && window.oddApp.showHighScoresModal()" style="touch-action: manipulation;">🏆 Top Scores</button>
-        </div>
-      </aside>
-
-      <!-- Center Panel: Game Canvas & Overlays -->
-      <main class="center-panel">
-        <div class="canvas-wrapper">
-          <canvas id="gameCanvas" width="320" height="240"></canvas>
-
-          <!-- Start Overlay -->
-          <div id="overlayStart" class="canvas-overlay">
-            <div class="intro-logo-banner">
-              <img id="imgIntroLogo" src="assets/oddballz-logo.png" alt="ODDBALLZ by Brian Semotiuk and Fred Kohler" class="intro-logo-img">
-            </div>
-            <p class="overlay-desc">
-              <strong>Color Match (Default)</strong>: Line up 5+ matching balls parallel to edges, or 3+ perpendicular ray lines! Press <strong>'F'</strong> or <strong>Ins</strong> to cycle colors.<br><br>
-              <strong>Rows Game</strong>: Build full hex rows across edges. Balls only drop if unsupported from both sides underneath!
-            </p>
-            <div style="display:flex; gap:0.5rem; justify-content:center; align-items:center; flex-wrap:wrap; margin-top:0.25rem;">
-              <button id="btnOverlayStart" class="btn" onclick="window.oddApp && window.oddApp.startGame()" style="touch-action: manipulation;">Start Game (Enter)</button>
-            </div>
-          </div>
-
-          <!-- Pause Overlay -->
-          <div id="overlayPause" class="canvas-overlay hidden">
-            <h2 class="overlay-title">PAUSED</h2>
-            <p class="overlay-desc">Game is currently paused.</p>
-            <div style="display:flex; gap:0.5rem; justify-content:center; align-items:center; flex-wrap:wrap; margin-top:0.5rem;">
-              <button id="btnPauseResume" class="btn" onclick="window.oddApp && window.oddApp.togglePause()" style="touch-action: manipulation;">Resume (P)</button>
-              <button id="btnPauseEnd" class="btn btn-secondary" onclick="window.oddApp && window.oddApp.promptEndGame()" style="touch-action: manipulation;">End Game</button>
-            </div>
-          </div>
-
-          <!-- Game Over Overlay -->
-          <div id="overlayGameOver" class="canvas-overlay hidden">
-            <h2 class="overlay-title" style="color:var(--accent-pink);">GAME OVER</h2>
-            <p class="overlay-desc">Final Score: <span id="finalScore" style="color:var(--accent-cyan); font-weight:bold;">0</span></p>
-            <div style="display:flex; gap:0.5rem; justify-content:center; align-items:center; flex-wrap:wrap; margin-top:0.5rem;">
-              <button id="btnGameOverReturn" class="btn btn-accent" onclick="window.oddApp && window.oddApp.returnToTitle()" style="touch-action: manipulation;">Main Menu (Enter)</button>
-              <button id="btnGameOverRecords" class="btn btn-secondary btn-sm" onclick="window.oddApp && window.oddApp.showHighScoresModal()" style="touch-action: manipulation;">🏆 Top Scores</button>
-            </div>
-          </div>
-        </div>
-
-        <!-- Touch Controls for Mobile/Tablet -->
-        <div class="touch-controls">
-          <button id="btnTouchLeft" class="touch-btn">◀ Left</button>
-          <button id="btnTouchRight" class="touch-btn">Right ▶</button>
-          <button id="btnTouchRotCCW" class="touch-btn">↺ Rot CCW</button>
-          <button id="btnTouchRotCW" class="touch-btn">↻ Rot CW</button>
-          <button id="btnTouchFlipX" class="touch-btn btn-flip" title="Flip Horizontally (Home / X)">↔&#xFE0E; Horiz Flip</button>
-          <button id="btnTouchFlipY" class="touch-btn btn-flip" title="Flip Vertically (End / Y)">↕&#xFE0E; Vert Flip</button>
-          <button id="btnTouchF" class="touch-btn btn-f">⚡&#xFE0E; Cycle Colors</button>
-          <button id="btnTouchSpace" class="touch-btn btn-space">↓&#xFE0E; Zip Drop</button>
-        </div>
-      </main>
-
-      <!-- Right Panel: Controls & Instructions -->
-      <aside class="panel side-panel controls-panel">
-        <h3 class="stat-label">Controls Guide</h3>
-        <div class="controls-list">
-          <div class="control-item">
-            <span>Move Left / Right</span>
-            <div><span class="key">◀</span> <span class="key">▶</span></div>
-          </div>
-          <div class="control-item">
-            <span>Rotate CCW / CW</span>
-            <div><span class="key">▲</span> <span class="key">▼</span></div>
-          </div>
-          <div class="control-item">
-            <span>Flip Shape X / Y</span>
-            <div><span class="key">Home</span> <span class="key">End</span></div>
-          </div>
-          <div class="control-item">
-            <span>Zip Drop (+1 Pt)</span>
-            <span class="key">Space</span>
-          </div>
-          <div class="control-item">
-            <span>Cycle Colors</span>
-            <div><span class="key key-f">F</span> <span class="key">Ins</span></div>
-          </div>
-          <div class="control-item">
-            <span>Start Game</span>
-            <span class="key">Enter</span>
-          </div>
-          <div class="control-item">
-            <span>Pause Game</span>
-            <span class="key">P</span>
-          </div>
-          <div class="control-item">
-            <span>Rows Mode / Color Mode</span>
-            <div><span class="key">R</span> <span class="key">C</span></div>
-          </div>
-          <div class="control-item">
-            <span>Toggle Audio</span>
-            <span class="key">M</span>
-          </div>
-        </div>
-      </aside>
-
+    <!-- Floating Keybind Help Card -->
+    <div class="keybinds-panel glass-card">
+      <div class="panel-title">Controls Guide</div>
+      <div class="key-row"><kbd>←</kbd> <kbd>→</kbd> Move Piece</div>
+      <div class="key-row"><kbd>↑</kbd> <kbd>↓</kbd> Rotate Piece</div>
+      <div class="key-row"><kbd>X</kbd> <kbd>Y</kbd> Flip X / Y</div>
+      <div class="key-row"><kbd class="key-highlight">F</kbd> Cycle Color Order</div>
+      <div class="key-row"><kbd class="key-space">Space</kbd> Hard Drop (Zip)</div>
     </div>
-  </div>
 
-  <!-- Records Dialog View -->
-  <div id="gameDialogView" class="dialog-container">
-    <div class="records-card">
-      <h2 class="overlay-title" style="font-size:1.5rem; text-align:center;">🏆 Top Scores</h2>
-      <table class="records-table">
-        <thead>
-          <tr>
-            <th>Rank</th>
-            <th>Score</th>
-            <th>Level</th>
-            <th>Mode</th>
-          </tr>
-        </thead>
-        <tbody id="recordsTableBody">
-          <!-- Populated dynamically -->
-        </tbody>
-      </table>
-      <button id="btnCloseRecords" class="btn btn-secondary btn-sm" onclick="window.oddApp && window.oddApp.closeHighScoresModal()" style="margin-top:1rem; align-self:center; touch-action: manipulation;">Close</button>
+    <!-- Start Overlay Modal -->
+    <div id="overlayStart" class="overlay-modal flex-center">
+      <div class="modal-card glass-card text-center">
+        <h2 class="modal-title">ODDBALLZ <span class="badge-hd">HD</span></h2>
+        <p class="modal-desc">
+          Experience the classic 1992 hex game engine transformed with real-time 3D sphere physics, metallic shaders, dynamic particle explosions, and Web Audio synthesis!
+        </p>
+
+        <div class="mode-summary">
+          <div id="modeCardColorMatch" class="mode-info mode-card-selectable active" role="button" tabindex="0">
+            <div class="mode-card-header">
+              <h3>💎 Color Match Mode</h3>
+              <span class="mode-select-badge">✓ ACTIVE</span>
+            </div>
+            <p>Match 5+ balls in parallel lines or 3+ in perpendicular angles. Use <kbd>F</kbd> to cycle color order before dropping!</p>
+          </div>
+          <div id="modeCardRowBuild" class="mode-info mode-card-selectable" role="button" tabindex="0">
+            <div class="mode-card-header">
+              <h3>⚡ Row Build Mode</h3>
+              <span class="mode-select-badge">SELECT</span>
+            </div>
+            <p>Build complete edge-to-edge hex rows. When a full row fills up, it clears for mega points!</p>
+          </div>
+        </div>
+
+        <div style="display:flex; flex-direction:column; align-items:center; gap:0.5rem; margin-top:0.5rem;">
+          <button id="btnOverlayStart" class="btn btn-primary btn-lg glow-btn">
+            🚀 START NEW GAME (Enter)
+          </button>
+          <button id="btnStartCredits" class="btn btn-secondary btn-sm" style="opacity: 0.9;">
+            ℹ️ About & Game Credits
+          </button>
+          <p class="credits-tagline" style="font-size: 0.8rem; opacity: 0.75; margin-top: 0.25rem; color: var(--text-muted);">
+            Inspired by <span style="white-space: nowrap;">Fred Kohler</span>'s early 1990s design &amp; <span style="white-space: nowrap;">Brian Semotiuk</span>'s 1992 Windows port.
+          </p>
+        </div>
+      </div>
     </div>
-  </div>
 
-  <!-- End Game Confirmation Modal -->
-  <div id="dialogConfirmEnd" class="dialog-container">
-    <div class="records-card confirm-card" style="align-items: center; text-align: center;">
-      <h2 class="overlay-title" style="font-size:1.5rem; text-align:center; color: var(--accent-pink);">End Game?</h2>
-      <p class="overlay-desc" style="text-align:center; margin: 1rem 0; color: var(--text-main);">Are you sure you want to end the current game and return to the title screen?</p>
-      <div style="display:flex; gap:0.75rem; justify-content:center; width:100%; margin-top: 0.5rem;">
-        <button id="btnConfirmEndYes" class="btn btn-accent btn-sm" onclick="window.oddApp && window.oddApp.confirmEndGame()" style="flex:1; touch-action: manipulation;">End Game</button>
-        <button id="btnConfirmEndNo" class="btn btn-secondary btn-sm" onclick="window.oddApp && window.oddApp.closeEndGameModal()" style="flex:1; touch-action: manipulation;">Cancel</button>
+    <!-- Pause Overlay Modal -->
+    <div id="overlayPause" class="overlay-modal flex-center hidden">
+      <div class="modal-card glass-card text-center">
+        <h2 class="modal-title">GAME PAUSED</h2>
+        <p class="modal-desc">Press <kbd>P</kbd> or click below to resume your game.</p>
+        <div class="modal-buttons">
+          <button id="btnResume" class="btn btn-primary btn-lg">▶ RESUME (P)</button>
+          <button id="btnPauseEnd" class="btn btn-secondary btn-lg">⏹ END GAME</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Confirm End Game Modal -->
+    <div id="dialogConfirmEnd" class="overlay-modal flex-center hidden">
+      <div class="modal-card glass-card text-center">
+        <h2 class="modal-title text-danger">END GAME?</h2>
+        <p class="modal-desc">Are you sure you want to end the current game and return to the main menu?</p>
+        <div class="modal-buttons">
+          <button id="btnConfirmEndYes" class="btn btn-primary btn-lg">End Game</button>
+          <button id="btnConfirmEndNo" class="btn btn-secondary btn-lg">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Game Over Overlay Modal -->
+    <div id="overlayGameOver" class="overlay-modal flex-center hidden">
+      <div class="modal-card glass-card text-center">
+        <h2 class="modal-title text-danger">GAME OVER</h2>
+        <p class="modal-desc">The hexagonal grid overflowed!</p>
+        <div class="final-score-box">
+          <span class="score-label">FINAL SCORE</span>
+          <span id="finalScore" class="final-score-val">0</span>
+        </div>
+        <div class="modal-buttons">
+          <button id="btnRestart" class="btn btn-primary btn-lg glow-btn">PLAY AGAIN (Enter)</button>
+          <button id="btnGameOverHighScores" class="btn btn-secondary btn-lg">🏆 High Scores</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- High Scores Modal -->
+    <div id="gameDialogView" class="overlay-modal flex-center hidden">
+      <div class="modal-card glass-card">
+        <div class="modal-header">
+          <h2>🏆 HALL OF FAME</h2>
+          <button id="btnCloseModal" class="btn-close">&times;</button>
+        </div>
+        <table class="hiscores-table">
+          <thead>
+            <tr>
+              <th>RANK</th>
+              <th>SCORE</th>
+              <th>LEVEL</th>
+              <th>MODE</th>
+            </tr>
+          </thead>
+          <tbody id="recordsTableBody">
+            <!-- Dynamic rows -->
+          </tbody>
+        </table>
+        <button id="btnRecordsClose" class="btn btn-secondary btn-lg" style="margin-top:1rem; align-self:center;">Close</button>
+      </div>
+    </div>
+
+    <!-- About & Credits Modal -->
+    <div id="gameDialogAbout" class="overlay-modal flex-center hidden">
+      <div class="modal-card glass-card text-center" style="max-width: 520px;">
+        <div class="modal-header" style="display:flex; justify-content:space-between; align-items:center; width:100%; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.75rem;">
+          <h2 style="margin:0; font-size:1.4rem;">ℹ️ ABOUT & CREDITS</h2>
+          <button id="btnCloseAbout" class="btn-close">&times;</button>
+        </div>
+        
+        <div class="about-content" style="text-align: left; margin: 1rem 0; display: flex; flex-direction: column; gap: 0.85rem; font-size: 0.92rem; line-height: 1.5; color: rgba(255, 255, 255, 0.9);">
+          <p>
+            <strong>Oddballz HD</strong> is inspired by a game designed by <strong style="white-space: nowrap;">Fred Kohler</strong> in the early 1990s and based off the Windows 1992 port by <strong style="white-space: nowrap;">Brian Semotiuk</strong>.
+          </p>
+          <p>
+            It uses the exact same algorithms and preserves authentic hexagonal strategy gameplay, enhanced with real-time 3D sphere physics, metallic shaders, dynamic space flight backdrops, and Web Audio synthesis.
+          </p>
+          <div style="background: rgba(255, 255, 255, 0.05); padding: 0.85rem 1rem; border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.15); font-size: 0.85rem; text-align: center; color: var(--accent-gold); font-weight: 600;">
+            Code and graphics/design copyright &copy; <span style="white-space: nowrap;">Brian Semotiuk</span> and <span style="white-space: nowrap;">Fred Kohler</span>.
+          </div>
+        </div>
+
+        <button id="btnAboutClose" class="btn btn-primary btn-lg" style="align-self: center; min-width: 140px;">Close</button>
       </div>
     </div>
   </div>
 
-  <!-- Standalone Game Script (Runs natively on file:// and http://) -->
-  <script src="js/oddballz-game.js?v=1.1.0"></script>
-
+  <script src="./oddballz-app.js?v=1.0.4"></script>
 </body>
 </html>
