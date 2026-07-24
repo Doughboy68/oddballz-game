@@ -336,6 +336,7 @@ body {
   background: rgba(255, 255, 255, 0.08);
   border: 1px solid rgba(255, 255, 255, 0.15);
   color: white;
+  -webkit-text-fill-color: currentColor;
   padding: 0.8rem 0.2rem;
   border-radius: 10px;
   font-weight: bold;
@@ -358,6 +359,7 @@ body {
   background: rgba(56, 189, 248, 0.2) !important;
   border: 1px solid var(--accent-cyan) !important;
   color: var(--accent-cyan) !important;
+  -webkit-text-fill-color: var(--accent-cyan) !important;
   font-size: 0.8rem !important;
   -webkit-appearance: none !important;
 }
@@ -367,6 +369,7 @@ body {
   background: rgba(244, 114, 182, 0.2) !important;
   border: 1px solid var(--accent-pink) !important;
   color: var(--accent-pink) !important;
+  -webkit-text-fill-color: var(--accent-pink) !important;
   font-size: 0.8rem !important;
   -webkit-appearance: none !important;
 }
@@ -376,6 +379,7 @@ body {
   background: rgba(192, 132, 252, 0.2) !important;
   border: 1px solid var(--accent-purple) !important;
   color: var(--accent-purple) !important;
+  -webkit-text-fill-color: var(--accent-purple) !important;
   font-size: 0.8rem !important;
   -webkit-appearance: none !important;
 }
