@@ -1708,6 +1708,16 @@
       bindTouch('btnTouchRight', () => this.engine.moveOBall(4));
       bindTouch('btnTouchRotCW', () => this.engine.transform(this.engine.rotCW));
       bindTouch('btnTouchRotCCW', () => this.engine.transform(this.engine.rotCCW));
+      bindTouch('btnTouchFlipY', () => {
+        if (this.engine.transform(this.engine.flipY)) {
+          if (this.audio && this.audio.enabled) this.audio.playSound('click');
+        }
+      });
+      bindTouch('btnTouchFlipX', () => {
+        if (this.engine.transform(this.engine.flipX)) {
+          if (this.audio && this.audio.enabled) this.audio.playSound('click');
+        }
+      });
       bindTouch('btnTouchFlip', () => {
         if (this.engine.transform(this.engine.flipX) || this.engine.transform(this.engine.flipY)) {
           if (this.audio && this.audio.enabled) this.audio.playSound('click');

@@ -358,7 +358,7 @@ body {
   background: rgba(56, 189, 248, 0.2) !important;
   border: 1px solid var(--accent-cyan) !important;
   color: var(--accent-cyan) !important;
-  font-size: 0.85rem !important;
+  font-size: 0.8rem !important;
   -webkit-appearance: none !important;
 }
 
@@ -367,15 +367,16 @@ body {
   background: rgba(244, 114, 182, 0.2) !important;
   border: 1px solid var(--accent-pink) !important;
   color: var(--accent-pink) !important;
-  font-size: 0.85rem !important;
+  font-size: 0.8rem !important;
   -webkit-appearance: none !important;
 }
 
 .touch-btn.btn-space {
-  grid-column: span 2 !important;
+  grid-column: span 1 !important;
   background: rgba(192, 132, 252, 0.2) !important;
   border: 1px solid var(--accent-purple) !important;
   color: var(--accent-purple) !important;
+  font-size: 0.8rem !important;
   -webkit-appearance: none !important;
 }
 

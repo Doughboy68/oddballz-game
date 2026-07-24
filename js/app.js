@@ -244,6 +244,8 @@ class OddballzApp {
     bindTouch('btnTouchRight', () => this.engine.moveOBall(4));
     bindTouch('btnTouchRotCW', () => this.engine.transform(this.engine.rotCW));
     bindTouch('btnTouchRotCCW', () => this.engine.transform(this.engine.rotCCW));
+    bindTouch('btnTouchFlipY', () => this.engine.transform(this.engine.flipY));
+    bindTouch('btnTouchFlipX', () => this.engine.transform(this.engine.flipX));
     bindTouch('btnTouchFlip', () => {
       if (!this.engine.transform(this.engine.flipX)) {
         this.engine.transform(this.engine.flipY);
