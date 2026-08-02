@@ -64,6 +64,11 @@ assets/
   ODDINTRO.mp3        Intro music track.
   ODDPLAY.mp3         In-game music track.
   ODDEND.mp3          Game-over music track.
+  site.webmanifest    Web-app manifest (installable app metadata + icons).
+  icons/              App icons (iPhone Add-to-Home-Screen / favicon / manifest).
+                      icon-120/152/167/180/192/512 are a real in-game playfield frame;
+                      favicon-16/32 are a single 1992 ball for legibility at tiny sizes.
+    alt-orb/          Alternate icon set: a "ball of balls" built from the 1992 sprites.
   original-1992/      Original source & assets (reference only, not loaded at runtime):
     ODDBALLZ.PAS      Main program (Borland Pascal 7.0 / Turbo Pascal for Windows).
     ODDUNIT.PAS       Game-logic unit.
