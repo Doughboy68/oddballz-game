@@ -1,6 +1,6 @@
-# Oddballz (1992) - Hexagonal Gravity Arcade Game
+# Oddballz (1994) - Hexagonal Gravity Arcade Game
 
-A complete web recreation of **Oddballz**, the original 1992 Tetris-inspired hexagonal gravity puzzle game by **Fred Kohler** and **Brian Semotiuk**. Reverse-engineered line-by-line from the original Borland Pascal 7.0 / Turbo Pascal for Windows source code (`ODDBALLZ.PAS` and `ODDUNIT.PAS`).
+A complete web recreation of **Oddballz**, the Tetris-inspired hexagonal gravity puzzle game by **Fred Kohler** and **Brian Semotiuk** — recreating the **Windows Version 1.0 (Copyright 1994)** release. Reverse-engineered line-by-line from the original Borland Pascal 7.0 / Turbo Pascal for Windows source code (`ODDBALLZ.PAS` and `ODDUNIT.PAS`, written 1991–1993).
 
 ---
 
@@ -9,7 +9,7 @@ A complete web recreation of **Oddballz**, the original 1992 Tetris-inspired hex
 - **Flat-Topped Hexagonal Grid**: Mapped to axial coordinates with flat top and bottom borders.
 - **Hex Gravity Sliding**: Unsupported balls roll down hex slopes diagonally to fill the lowest available honeycomb slots.
 - **The 'F' Key Color Cycling**: Pressing **'F'** (or touch button) cycles the colors of active falling balls in real time.
-- **Authentic 1992 Match Rules**:
+- **Authentic Match Rules**:
   - $\ge 5$ matching balls in a line parallel to edge directions.
   - $\ge 3$ matching balls in a line perpendicular to edges (even across empty gaps).
 - **Web Audio 16-Bit Synthesizer**: Recreates exact audio pitch frequencies (`Freq[2..20]`) for match pops, drop thuds, color clicks, and level-up fanfares.
@@ -49,7 +49,7 @@ npm run dev
 
 ## 📂 Project Structure
 
-Everything needed to run the game lives in the root; media and original 1992 material live under `assets/`.
+Everything needed to run the game lives in the root; media and original vintage material live under `assets/`.
 
 ```
 index.html            Game UI layout, sidebar stats, glassmorphic panels, and modals.
@@ -67,9 +67,9 @@ assets/
   site.webmanifest    Web-app manifest (installable app metadata + icons).
   icons/              App icons (iPhone Add-to-Home-Screen / favicon / manifest).
                       icon-120/152/167/180/192/512 are a real in-game playfield frame;
-                      favicon-16/32 are a single 1992 ball for legibility at tiny sizes.
-    alt-orb/          Alternate icon set: a "ball of balls" built from the 1992 sprites.
-  original-1992/      Original source & assets (reference only, not loaded at runtime):
+                      favicon-16/32 are a single original ball for legibility at tiny sizes.
+    alt-orb/          Alternate icon set: a "ball of balls" built from the original sprites.
+  original-source/    Original source & assets (reference only, not loaded at runtime):
     ODDBALLZ.PAS      Main program (Borland Pascal 7.0 / Turbo Pascal for Windows).
     ODDUNIT.PAS       Game-logic unit.
     BALL*.BMP         Original ball bitmaps (embedded as base64 inside oddballz-game.js).

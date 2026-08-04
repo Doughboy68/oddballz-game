@@ -1,6 +1,6 @@
 /**
- * Oddballz (1992) - Complete Standalone Game Bundle
- * Recreates Fred Kohler & Brian Semotiuk's 1992 Hexagonal Gravity Arcade Game.
+ * Oddballz (1994) - Complete Standalone Game Bundle
+ * Recreates Fred Kohler & Brian Semotiuk's Hexagonal Gravity Arcade Game (Windows v1.0, 1994).
  * Pure Vanilla JavaScript (No CORS module restrictions - works on file:// and http://).
  */
 
